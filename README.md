@@ -22,14 +22,14 @@ public/robots.txt, public/sitemap.xml
 
 ## Develop
 ```
-npm install
-npm run dev        # http://localhost:5173
-npm run build      # static output in dist/
-npm run preview    # serves dist/ at http://localhost:4173
+yarn install
+yarn dev           # http://localhost:5173
+yarn build         # static output in dist/
+yarn preview       # serves dist/ at http://localhost:4173
 ```
 
 ## Deploy
-Any static host works (Netlify, Vercel, Cloudflare Pages, S3 or nginx). The build command is `npm run build` and the output folder is `dist`.
+Any static host works (Netlify, Vercel, Cloudflare Pages, S3 or nginx). The build command is `yarn build` and the output folder is `dist`.
 
 ## Design system (`src/styles/theme.css`)
 The site uses only the four logo colours.
