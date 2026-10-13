@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BuildNexa — Construction ERP for Projects, Procurement &amp; Finance</title>
+  <meta name="description" content="BuildNexa is a construction and solar EPC ERP: WBS and daily progress reporting, procure-to-pay, inventory, RA billing, finance and Tally-compatible export — every document tied to one ledger." />
+  <meta name="theme-color" content="#2F3540" />
+  <link rel="canonical" href="https://buildnexa.io/" />
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BuildNexa" />
+  <meta property="og:title" content="BuildNexa — Construction ERP for Projects, Procurement &amp; Finance" />
+  <meta property="og:description" content="One system of record for construction and solar EPC delivery — progress, procurement, stores, billing and the ledger, all connected." />
+  <meta property="og:url" content="https://buildnexa.io/" />
+  <meta property="og:image" content="https://buildnexa.io/assets/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="/assets/buildnexa-icon-96.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/assets/buildnexa-icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="preload" as="image" href="/assets/img/hero-video-poster.webp" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "BuildNexa",
+    "url": "https://buildnexa.io/",
+    "logo": "https://buildnexa.io/brand/buildnexa-icon.png",
+    "description": "Construction and solar EPC ERP for projects, procurement, inventory, client billing and finance.",
+    "email": "hello@buildnexa.io"
+  }
+  </script>
+  <script>document.documentElement.classList.add("js")</script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Can we bring our existing Excel DPR trackers?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Workbook Import previews your .xlsx row by row — WBS items, scope quantities and dates — before it creates anything. Templates are available from the Setup Library." } },
+      { "@type": "Question", "name": "Does BuildNexa work with Tally?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Ledger & Tally Export exports the period’s vouchers as Tally-compatible XML for your statutory auditor." } },
+      { "@type": "Question", "name": "How are client RA bills calculated?", "acceptedAnswer": { "@type": "Answer", "text": "At project level: contract value × cumulative % complete, less what has already been billed. Retention and TDS defaults come from the client master, so nobody re-types them." } },
+      { "@type": "Question", "name": "What if a document was posted by mistake?", "acceptedAnswer": { "@type": "Answer", "text": "Cancel it. The cancel guard first checks that nothing downstream still depends on it, then posts a reversal entry (never an edit), reverses any stock movement and recomputes the linked DPR quantities." } },
+      { "@type": "Question", "name": "Who can see what?", "acceptedAnswer": { "@type": "Answer", "text": "Each user has one organisation role — Org admin, Portfolio lead, Accounts, Procurement, Stores, HR or Member — plus project roles such as Project manager, Engineering, Procurement, Site or Viewer." } },
+      { "@type": "Question", "name": "Is it only for solar projects?", "acceptedAnswer": { "@type": "Answer", "text": "No. BuildNexa started with solar EPC delivery, and the same WBS, procurement, inventory and finance modules run building, infrastructure and other construction projects." } }
+    ]
+  }
+  </script>
+</head>
+<body class="is-loading">
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

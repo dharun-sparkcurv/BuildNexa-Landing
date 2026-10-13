@@ -1,0 +1,68 @@
+/* ==========================================================================
+   BuildNexa — Depth layer styles (pairs with js/depth.js)
+   ========================================================================== */
+
+/* Layered skyline in the hero */
+.skyline { position: absolute; left: -4%; right: -4%; bottom: 0; z-index: 0; pointer-events: none; will-change: translate; }
+.skyline svg { width: 100%; height: 100%; display: block; }
+.skyline--back { height: 46vh; opacity: .8; -webkit-mask-image: linear-gradient(transparent, #000 40%); mask-image: linear-gradient(transparent, #000 40%); }
+.skyline--front { height: 30vh; opacity: .9; }
+.skyline--front::after { content: ""; position: absolute; inset: auto 0 0; height: 40%; background: linear-gradient(transparent, #2F3540); }
+.hero__content, .hero__float, .hero__canvas { will-change: translate, opacity; }
+
+/* Giant outlined numerals behind sections */
+.section, .cta { overflow: clip; }
+.section > .container { position: relative; z-index: 1; }
+.depth-num {
+  position: absolute; right: 2vw; top: 4%; z-index: 0; pointer-events: none; user-select: none;
+  font-size: clamp(9rem, 26vw, 24rem); font-weight: 800; line-height: .8; letter-spacing: -0.06em;
+  color: transparent; -webkit-text-stroke: 1.5px rgba(254,254,254,.07);
+  will-change: translate;
+}
+.about .depth-num { -webkit-text-stroke-color: rgba(254,254,254,.16); }
+.faq .depth-num, .work .depth-num { right: auto; left: 2vw; }
+
+/* Card drift composes with tilt/reveal via `translate` */
+.service-card, .project { will-change: translate; }
+@media (min-width: 901px) {
+  .service-grid { row-gap: 56px; }   /* room for column drift */
+  .work-grid { row-gap: 88px; }
+}
+
+/* Console tilt-up needs perspective on its stage */
+.solutions__stage { perspective: 1400px; }
+.console { transform-origin: 50% 100%; will-change: transform; }
+
+/* Deeper inner parallax in project visuals + counter-moving UI layer */
+.pv__inner { inset: -16% 0; }
+.pv__ui { translate: 0 calc(var(--py, 0%) * -2.2); transition: translate .2s linear; }
+
+@media (max-width: 900px) {
+  .skyline--back { height: 30vh; }
+  .skyline--front { height: 20vh; }
+  .depth-num { font-size: 9rem; top: 2%; }
+}
+
+/* ==========================================================================
+   Smooth transitions (pairs with js/smooth.js)
+   ========================================================================== */
+
+/* Sliding nav pill — one indicator glides between links */
+.nav__list { position: relative; }
+.nav__pill {
+  position: absolute; left: 0; top: 0; height: 100%; width: 0; z-index: -1; opacity: 0; border-radius: 999px;
+  background: linear-gradient(135deg, #9A0129, #9A0129);
+  box-shadow: 0 6px 22px -6px rgba(154,1,41,.7), inset 0 1px 0 rgba(254,254,254,.3);
+  transition: translate .6s var(--ease), width .6s var(--ease), opacity .4s var(--ease);
+}
+.nav__list { isolation: isolate; }
+.nav__link.is-active { background: transparent; box-shadow: none; }
+
+/* Project visuals wipe open, then settle from a slight zoom */
+.js .project[data-reveal] .project__media {
+  clip-path: inset(14% 10% 14% 10% round 28px);
+  transition: clip-path 1.5s var(--ease) calc(var(--d, 0s) + .1s);
+}
+.js .project[data-reveal].is-in .project__media { clip-path: inset(0 round var(--radius-lg)); }
+.js .project[data-reveal] .pv__inner { scale: 1.25; transition: scale 1.9s var(--ease) calc(var(--d, 0s) + .1s), transform 1.2s var(--ease); }
+.js .project[data-reveal].is-in .pv__inner { scale: 1; }
