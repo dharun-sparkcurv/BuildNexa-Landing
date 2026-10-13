@@ -14,7 +14,7 @@ src/effects/          interaction layer that works on the rendered DOM:
                       main.js   reveals, header, scroll effects, hero video reel, project dialog, contact form
                       kit.js    toasts, command menu (Ctrl/⌘ K), accordion, tabs, compare toggle, calculator
                       depth.js  hero parallax, section numerals, scale-in panels, console tilt-up
-                      smooth.js inertial scrolling, eased anchor navigation, sliding nav pill
+                      smooth.js eased nav-link jumps and sliding nav pill (wheel/touch scrolling stays native)
 src/styles/           styles.css (base), glass.css, kit.css, depth.css, theme.css (design system, loaded last)
 public/assets/        brand icons, photos (img/), hero clips (video/)
 public/robots.txt, public/sitemap.xml
@@ -102,6 +102,6 @@ All photos are from Unsplash under the [Unsplash License](https://unsplash.com/l
 ## Accessibility & performance
 - **Keyboard:** skip link, visible focus rings, a mobile menu that closes with Esc and returns focus, tabs that support arrow keys and Home/End, a native `<details>` accordion, and a native `<dialog>` for project details.
 - **Images:** every image has alt text, below-the-fold images lazy-load, and explicit `width`/`height` attributes prevent layout shift.
-- **Reduced motion:** `prefers-reduced-motion` turns off the loader, parallax, inertial scrolling, entrance animations and the hero video.
+- **Reduced motion:** `prefers-reduced-motion` turns off the loader, parallax, eased nav-link jumps, entrance animations and the hero video.
 - **Responsive:** tested with no horizontal overflow at 320, 390, 768 and 1440px.
 - **Known:** axe-core flags the semi-transparent header's nav links when the header floats over light sections, and the selected role tab (a false alarm: its white label sits on the crimson pill, not the tab bar).

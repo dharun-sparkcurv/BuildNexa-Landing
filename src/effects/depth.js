@@ -123,8 +123,6 @@ function block1() {
         if (skyFront) skyFront.style.translate = `${(smx * -42).toFixed(1)}px ${(y * 0.12).toFixed(1)}px`;
         heroContent.style.translate = `0 ${(y * 0.28).toFixed(1)}px`;
         heroContent.style.opacity = (1 - p * 1.25).toFixed(3);
-        heroContent.style.filter = p > 0.02 ? `blur(${(p * 8).toFixed(2)}px)` : "";
-        heroContent.style.scale = (1 - p * 0.08).toFixed(4);
         heroMeta.style.opacity = (1 - p * 2.5).toFixed(3);
         if (heroFloat) heroFloat.style.translate = `0 ${(y * -0.35).toFixed(1)}px`;
       }

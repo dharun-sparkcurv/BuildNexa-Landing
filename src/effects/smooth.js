@@ -1,33 +1,25 @@
 /* ==========================================================================
    BuildNexa — Smooth transitions
-   Inertial scrolling (Lenis-style, on native scroll so sticky/pinned
-   sections keep working), eased anchor navigation and a sliding nav pill.
-   Touch devices keep native momentum; reduced motion keeps native scroll.
+   Wheel, touch and keyboard scrolling are left native (no inertia) so the
+   page never lags behind input. Only nav-link jumps are eased, plus a
+   sliding nav pill. Reduced motion jumps instantly.
    ========================================================================== */
 function block1() {
   "use strict";
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   const root = document.documentElement;
   const maxScroll = () => root.scrollHeight - window.innerHeight;
   const clamp = (v, a, b) => Math.min(Math.max(v, a), b);
   const easeInOutExpo = (t) => (t === 0 ? 0 : t === 1 ? 1 : t < 0.5 ? Math.pow(2, 20 * t - 10) / 2 : (2 - Math.pow(2, -20 * t + 10)) / 2);
 
-  let current = window.scrollY, target = current, running = false, tween = null;
-  const locked = () => document.body.style.overflow === "hidden" || document.querySelector("dialog[open]");
+  root.style.scrollBehavior = "auto"; // the eased jump below drives the scroll; CSS smooth would fight it
+  let running = false, tween = null;
 
   function loop(now) {
-    if (tween) {
-      const t = clamp((now - tween.start) / tween.dur, 0, 1);
-      current = target = tween.from + (tween.to - tween.from) * easeInOutExpo(t);
-      if (t >= 1) tween = null;
-    } else {
-      current += (target - current) * 0.118; // inertia: lower = heavier (0.1 felt like 8/10, this is ~6.8/10)
-      if (Math.abs(target - current) < 0.5) current = target;
-    }
-    window.scrollTo(0, current);
-    if (tween || current !== target) requestAnimationFrame(loop);
-    else running = false;
+    const t = clamp((now - tween.start) / tween.dur, 0, 1);
+    window.scrollTo(0, tween.from + (tween.to - tween.from) * easeInOutExpo(t));
+    if (t < 1) requestAnimationFrame(loop);
+    else { tween = null; running = false; }
   }
   const start = () => { if (!running) { running = true; requestAnimationFrame(loop); } };
 
@@ -39,9 +31,9 @@ function block1() {
     if (y == null) return;
     const to = clamp(y, 0, maxScroll());
     if (reduceMotion) { window.scrollTo(0, to); return; }
-    current = window.scrollY;
-    const dist = Math.abs(to - current);
-    tween = { from: current, to, start: performance.now(), dur: Math.min(1530, Math.max(510, dist * 0.3)) * (duration / 1.2) };
+    const from = window.scrollY;
+    const dist = Math.abs(to - from);
+    tween = { from, to, start: performance.now(), dur: Math.min(1530, Math.max(510, dist * 0.3)) * (duration / 1.2) };
     start();
   }
   window.bnScrollTo = scrollToTarget;
@@ -58,48 +50,6 @@ function block1() {
     history.replaceState(null, "", hash);
     if (el && el !== 0) setTimeout(() => el.focus?.({ preventScroll: true }), 50);
   });
-
-  /* Inertial wheel + keyboard (desktop only) */
-  if (!reduceMotion && finePointer) {
-    root.style.scrollBehavior = "auto"; // CSS smooth would fight the loop
-
-    window.addEventListener("wheel", (e) => {
-      if (e.ctrlKey || locked()) return;
-      // let inner scrollers (textarea, lists, dialogs) handle their own wheel
-      for (let n = e.target; n && n !== document.body; n = n.parentElement) {
-        if (n.scrollHeight > n.clientHeight + 1 && /(auto|scroll)/.test(getComputedStyle(n).overflowY)) return;
-      }
-      e.preventDefault();
-      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? window.innerHeight : 1;
-      tween = null;
-      if (!running) current = window.scrollY;
-      target = clamp(target + e.deltaY * unit, 0, maxScroll());
-      start();
-    }, { passive: false });
-
-    window.addEventListener("keydown", (e) => {
-      if (locked() || e.altKey || e.ctrlKey || e.metaKey) return;
-      const tag = (e.target.tagName || "").toLowerCase();
-      if (/(input|textarea|select)/.test(tag) || e.target.isContentEditable) return;
-      if (e.key === " " && (tag === "button" || tag === "a" || tag === "summary")) return;
-      const page = window.innerHeight * 0.85;
-      const delta = { ArrowDown: 120, ArrowUp: -120, PageDown: page, PageUp: -page, " ": e.shiftKey ? -page : page }[e.key];
-      if (e.key === "Home") { e.preventDefault(); scrollToTarget(0); return; }
-      if (e.key === "End") { e.preventDefault(); scrollToTarget(maxScroll()); return; }
-      if (delta == null) return;
-      e.preventDefault();
-      tween = null;
-      if (!running) current = window.scrollY;
-      target = clamp(target + delta, 0, maxScroll());
-      start();
-    });
-
-    // Scrollbar drag, find-in-page, etc.: resync when scroll changes without us
-    window.addEventListener("scroll", () => {
-      if (!running) current = target = window.scrollY;
-    }, { passive: true });
-    window.addEventListener("resize", () => { target = clamp(target, 0, maxScroll()); });
-  }
 
   /* Sliding nav pill */
   const list = document.querySelector(".nav__list");
