@@ -686,6 +686,9 @@ function block1() {
     back.preload = "auto";
     back.classList.add("is-hidden");
     heroVideo.after(back);
+    // React sets `muted` as a property, not an attribute, so the clone isn't muted.
+    // Unmuted video can't autoplay — mute both layers explicitly.
+    [heroVideo, back].forEach((v) => { v.muted = true; v.playsInline = true; });
 
     let front = heroVideo, standby = back, clip = 0, advancing = false;
     const load = (video, i) => { video.src = clips[i % clips.length]; video.load(); };
@@ -693,10 +696,10 @@ function block1() {
     const nextClip = () => {
       if (advancing) return;
       advancing = true;
-      clip = (clip + 1) % clips.length;
       const incoming = standby, outgoing = front;
       incoming.currentTime = 0;
-      incoming.play().catch(() => {}).finally(() => {
+      incoming.play().then(() => {
+        clip = (clip + 1) % clips.length;
         incoming.style.zIndex = 2;           // fade the new clip in on top…
         outgoing.style.zIndex = 1;
         incoming.classList.remove("is-hidden");
@@ -708,6 +711,8 @@ function block1() {
           load(standby, clip + 1);
           advancing = false;
         }, 700);
+      }).catch(() => {
+        advancing = false; // couldn't start the next clip: keep the current one on screen and playing
       });
     };
     // Each clip plays for data-clip-seconds (or to its end if shorter)
