@@ -654,3 +654,7 @@ h1, h2, h3, .btn, .nav__link, .brand__name, .badge, .roles__tab, .seg__btn, .qui
 .contact__map figcaption span { font-weight: 500; }
 .contact__map a { color: var(--c-snow); text-decoration: underline; text-decoration-color: rgba(254,254,254, 0.5); text-underline-offset: 3px; }
 .contact__map a:hover { text-decoration-color: var(--c-snow); }
+
+/* Hide the page's native scrollbar (scrolling still works; the top progress line shows position) */
+html { scrollbar-width: none; }
+html::-webkit-scrollbar { display: none; }
