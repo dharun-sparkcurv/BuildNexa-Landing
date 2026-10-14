@@ -36,9 +36,9 @@ export default function Contact() {
             </figure>
           </div>
       
-          {/* Integration point: set data-endpoint to a backend that accepts JSON POSTs (e.g. Formspree or your API).
-               Without it, the form opens the visitor's email app addressed to data-mailto — it never reports a send that didn't happen. */}
-          <form className="form" data-contact-form data-endpoint="" data-mailto="hello@buildnexa.io" noValidate data-reveal>
+          {/* data-endpoint is the contact API (server/contact.js, SMTP to hello@buildnexa.io). Clear it to fall back to the visitor's email app.
+               The fallback never reports a send that didn't happen. */}
+          <form className="form" data-contact-form data-endpoint="/api/contact" data-mailto="hello@buildnexa.io" noValidate data-reveal>
             <div className="form__row">
               <div className="field">
                 <input id="f-name" name="name" type="text" autoComplete="name" placeholder=" " required/>

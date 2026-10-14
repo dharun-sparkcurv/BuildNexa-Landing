@@ -62,9 +62,13 @@ Radius is 18px for cards and pill-shaped for buttons. Blur is 16px, applied only
 - **Legal pages:** there are no Privacy or Terms pages, so the footer doesn't link to any. Add them before collecting leads at scale.
 
 ## Contact form
-- **Integration point:** set `data-endpoint` on the `<form>` in `src/components/Contact.jsx` to a backend that accepts JSON POSTs (Formspree, Web3Forms, Getform or your own API). It sends `name, email, phone, company, service, contact_pref, message, consent`. The endpoint must allow CORS for `Content-Type: application/json`.
-- **States:** the form validates fields inline, shows a spinner while sending, and shows success or error states. A failed request shows an error and never a false "sent" message.
-- **Without an endpoint (current):** it opens the visitor's email app with the message pre-filled, addressed to `data-mailto`, and says exactly that.
+- **Sending:** the form POSTs JSON to `/api/contact` (`data-endpoint` in `src/components/Contact.jsx`). The API in `server/contact.js` validates the fields, then emails them to `hello@buildnexa.io` over SMTP, with the visitor's address as Reply-To.
+- **Setup:** copy `.env.example` to `.env` and fill in the `SMTP_*` values. `SMTP_FROM` must be an address your SMTP account may send from.
+- **Run locally:** `yarn dev` (site on :5173) and `yarn server` (API on :8787) in two terminals. Vite proxies `/api` to the API.
+- **Production:** serve the API on the same origin as the site under `/api/contact` (for example a reverse proxy to `localhost:8787`). `SMTP_*` stay on the server, never in the built site.
+- **Checks:** the API rejects invalid fields (400), rate-limits each IP to 5 messages per 10 minutes (429), and caps request size at 16 KB. The rate limit is in memory, so it resets on restart.
+- **States:** the form validates fields inline, shows a spinner while sending, and shows success or error states. A failed send shows an error and never a false "sent" message.
+- **If the API is down:** the form shows an error and asks the visitor to email `hello@buildnexa.io`.
 - **Spam:** a honeypot field silently drops bot submissions.
 
 ## Office map
